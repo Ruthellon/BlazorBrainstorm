@@ -1,0 +1,36 @@
+﻿.brainstorm-drawdeck {
+    height: 190px;
+    width: 140px;
+    float: left;
+}
+
+.brainstorm-drawdeck:not(:first-child) {
+    margin-left: -130px;
+}
+
+.brainstorm-can-drop {
+    border: 2px dashed green;
+}
+
+.brainstorm-discards {
+    height: 190px;
+    width: 140px;
+    float: left;
+}
+
+.brainstorm-discards:not(:first-child) {
+    margin-left: -55px;
+}
+
+.brainstorm-drawdeck {
+    width: 140px;
+    vertical-align:top;
+}
+
+.brainstorm-stackpile:not(:first-child) {
+    margin-top: -130px;
+}
+
+img {
+    transform:rotate(90deg);
+}

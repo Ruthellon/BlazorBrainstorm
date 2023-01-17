@@ -1,0 +1,37 @@
+﻿@using Brainstorm.Models;
+@using Brainstorm.Models.Common.Enums;
+
+@code {
+    [Parameter]
+    public StackPile Pile { get; set; }
+
+    [Parameter]
+    public Card DraggedCard { get; set; }
+
+    [Parameter]
+    public EventCallback DropEvent { get; set; }
+
+    private string CssClass { get; set; }
+
+    public void EmptyStackDragEnter()
+    {
+        if (DraggedCard.IsCreature)
+            CssClass = "brainstorm-can-drop";
+    }
+
+    public void EmptyStackDragLeave()
+    {
+        CssClass = "";
+    }
+}
+
+<img class="@CssClass"
+     src="images/Brainstorm/cardBackGrey.png"
+     @ondragenter="EmptyStackDragEnter"
+     @ondragleave="EmptyStackDragLeave"
+     @ondrop="DropEvent"
+     @ondrop:preventDefault="true"
+     @ondrop:stopPropagation="true"
+     ondragover="event.preventDefault();"
+     ondragstart="event.dataTransfer.setData('', event.target.id);"
+     draggable="false"/>

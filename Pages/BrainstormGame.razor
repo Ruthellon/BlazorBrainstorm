@@ -1,0 +1,582 @@
+﻿@page "/brainstorm"
+
+@using Brainstorm.Models;
+@using Brainstorm.Models.Common.Enums;
+@using Brainstorm.Pages.Partials;
+@using System.Threading; 
+
+@code {
+    //The card the user is currently dragging
+    public Card DraggedCard { get; set; }
+
+    public int DraggedHandIndex { get; set; } = -1;
+    public int DraggedFieldIndex { get; set; } = -1;
+
+    public GameStatus Status { get; set; } = GameStatus.NotStarted;
+
+    //The three discarded cards being shown to the user.
+    //FirstDiscard is the topmost of these cards.
+    public Card FirstDiscard { get; set; }
+    public Card SecondDiscard { get; set; }
+    public Card ThirdDiscard { get; set; }
+
+    public List<Card> Hand { get; set; }
+
+    CardDeck OppDeck = new CardDeck();
+    CardDeck MyDeck = new CardDeck();
+
+    //All discarded cards not shown to the user.
+    DiscardPile DiscardPile = new DiscardPile();
+
+    SuitPile ClubsPile = new SuitPile(CardSuit.Clubs);
+    SuitPile DiamondsPile = new SuitPile(CardSuit.Diamonds);
+    SuitPile SpadesPile = new SuitPile(CardSuit.Spades);
+    SuitPile HeartsPile = new SuitPile(CardSuit.Hearts);
+
+    //Stack piles are numbered from left to right (1 is leftmost).
+    StackPile[] StackPiles = new StackPile[25];
+    StackPile StackPile0 = new StackPile();
+    StackPile StackPile1 = new StackPile();
+    StackPile StackPile2 = new StackPile();
+    StackPile StackPile3 = new StackPile();
+    StackPile StackPile4 = new StackPile();
+    StackPile StackPile5 = new StackPile();
+    StackPile StackPile6 = new StackPile();
+    StackPile StackPile7 = new StackPile();
+    StackPile StackPile8 = new StackPile();
+    StackPile StackPile9 = new StackPile();
+    StackPile StackPile10 = new StackPile();
+    StackPile StackPile11 = new StackPile();
+    StackPile StackPile12 = new StackPile();
+    StackPile StackPile13 = new StackPile();
+    StackPile StackPile14 = new StackPile();
+    StackPile StackPile15 = new StackPile();
+    StackPile StackPile16 = new StackPile();
+    StackPile StackPile17 = new StackPile();
+    StackPile StackPile18 = new StackPile();
+    StackPile StackPile19 = new StackPile();
+    StackPile StackPile20 = new StackPile();
+    StackPile StackPile21 = new StackPile();
+    StackPile StackPile22 = new StackPile();
+    StackPile StackPile23 = new StackPile();
+    StackPile StackPile24 = new StackPile();
+
+    public void NewGame()
+    {
+        //Set the game status to Playing
+        Status = GameStatus.Playing;
+
+        //Create a new draw deck and discard pile
+        MyDeck = new CardDeck();
+        DiscardPile = new DiscardPile();
+
+        //Reset the discards
+        FirstDiscard = null;
+        SecondDiscard = null;
+        ThirdDiscard = null;
+
+        Hand = new List<Card>();
+
+        //Create new suit piles
+        ClubsPile = new SuitPile(CardSuit.Clubs);
+        DiamondsPile = new SuitPile(CardSuit.Diamonds);
+        SpadesPile = new SuitPile(CardSuit.Spades);
+        HeartsPile = new SuitPile(CardSuit.Hearts);
+
+        //Create new stacks
+        StackPile0 = new StackPile();
+        StackPile1 = new StackPile();
+        StackPile2 = new StackPile();
+        StackPile3 = new StackPile();
+        StackPile4 = new StackPile();
+        StackPile5 = new StackPile();
+        StackPile6 = new StackPile();
+        StackPile7 = new StackPile();
+        StackPile8 = new StackPile();
+        StackPile9 = new StackPile();
+        StackPile10 = new StackPile();
+        StackPile11 = new StackPile();
+        StackPile12 = new StackPile();
+        StackPile13 = new StackPile();
+        StackPile14 = new StackPile();
+        StackPile15 = new StackPile();
+        StackPile16 = new StackPile();
+        StackPile17 = new StackPile();
+        StackPile18 = new StackPile();
+        StackPile19 = new StackPile();
+        StackPile20 = new StackPile();
+        StackPile21 = new StackPile();
+        StackPile22 = new StackPile();
+        StackPile23 = new StackPile();
+        StackPile24 = new StackPile();
+
+        for (int i = 0; i < StackPiles.Length; i++)
+        {
+            StackPiles[i] = new StackPile();
+        }
+
+        ////Deal cards to the stacks
+        //StackPile1.Add(DrawDeck.Draw());
+        //StackPile2.Add(DrawDeck.DrawHidden());
+        //StackPile3.Add(DrawDeck.DrawHidden());
+        //StackPile4.Add(DrawDeck.DrawHidden());
+        //StackPile5.Add(DrawDeck.DrawHidden());
+        //StackPile6.Add(DrawDeck.DrawHidden());
+        //StackPile7.Add(DrawDeck.DrawHidden());
+
+        //StackPile2.Add(DrawDeck.Draw());
+        //StackPile3.Add(DrawDeck.DrawHidden());
+        //StackPile4.Add(DrawDeck.DrawHidden());
+        //StackPile5.Add(DrawDeck.DrawHidden());
+        //StackPile6.Add(DrawDeck.DrawHidden());
+        //StackPile7.Add(DrawDeck.DrawHidden());
+
+        //StackPile3.Add(DrawDeck.Draw());
+        //StackPile4.Add(DrawDeck.DrawHidden());
+        //StackPile5.Add(DrawDeck.DrawHidden());
+        //StackPile6.Add(DrawDeck.DrawHidden());
+        //StackPile7.Add(DrawDeck.DrawHidden());
+
+        //StackPile4.Add(DrawDeck.Draw());
+        //StackPile5.Add(DrawDeck.DrawHidden());
+        //StackPile6.Add(DrawDeck.DrawHidden());
+        //StackPile7.Add(DrawDeck.DrawHidden());
+
+        //StackPile5.Add(DrawDeck.Draw());
+        //StackPile6.Add(DrawDeck.DrawHidden());
+        //StackPile7.Add(DrawDeck.DrawHidden());
+
+        //StackPile6.Add(DrawDeck.Draw());
+        //StackPile7.Add(DrawDeck.DrawHidden());
+
+        //StackPile7.Add(DrawDeck.Draw());
+
+        StateHasChanged();
+    }
+
+    public void Draw()
+    {
+        ////If the bottommost discard is there...
+        //if(ThirdDiscard != null)
+        //    DiscardPile.Add(ThirdDiscard); //Add it to the discard pile
+
+        ////If the middle discard is there...
+        //if(SecondDiscard != null)
+        //    ThirdDiscard = SecondDiscard; //Make it the bottommost
+
+        ////If the topmost discard is there...
+        //if(FirstDiscard != null)
+        //    SecondDiscard = FirstDiscard; //Make it the middle discard
+
+        //Set the topmost discard to the top card of the draw pile
+        Card card = MyDeck.Draw();
+        FirstDiscard = card;
+
+        Hand.Add(card);
+
+        //Let Blazor know to update the display
+        StateHasChanged();
+    }
+
+    public void ResetDrawPile()
+    {
+        //First, add all three discards to the discard pile.
+        DiscardPile.Add(ThirdDiscard);
+        DiscardPile.Add(SecondDiscard);
+        DiscardPile.Add(FirstDiscard);
+
+        //Get all cards in the discard pile
+        var allCards = DiscardPile.GetAll();
+
+        //Put your thing down, flip it and reverse it
+        allCards.Reverse();
+
+        //Add them back to the draw pile
+        foreach (var card in allCards)
+        {
+            MyDeck.Add(card);
+        }
+
+        //Reset the discards and discard pile
+        FirstDiscard = null;
+        SecondDiscard = null;
+        ThirdDiscard = null;
+        DiscardPile = new DiscardPile();
+    }
+
+    public void HandleDragStart(Card selectedCard)
+    {
+        DraggedCard = selectedCard;
+    }
+
+    public void HandleFieldDragStart(int selectedIndex)
+    {
+        DraggedHandIndex = -1;
+        DraggedFieldIndex = selectedIndex;
+        DraggedCard = StackPiles[selectedIndex].Last();
+    }
+
+    public void HandleHandDragStart(int selectedIndex)
+    {
+        DraggedFieldIndex = -1;
+        DraggedHandIndex = selectedIndex;
+        DraggedCard = Hand[selectedIndex];
+    }
+
+    private void MoveActiveCard(SuitPile suitPile)
+    {
+        MoveActiveCard(DraggedCard, suitPile);
+    }
+
+    private void MoveActiveCard(Card card, SuitPile suitPile)
+    {
+        if (FirstDiscard != null && FirstDiscard.Suit == card.Suit && FirstDiscard.Value == card.Value)
+        {
+            RemoveFromDiscards(card);
+        }
+        RemoveIfExistsInAnyStack(card);
+        RemoveFromSuitPiles(card);
+
+        suitPile.Add(card);
+
+        StateHasChanged();
+    }
+
+    private void RemoveIfExistsInAnyStack(Card card)
+    {
+        StackPile1.RemoveIfExists(card);
+        StackPile2.RemoveIfExists(card);
+        StackPile3.RemoveIfExists(card);
+        StackPile4.RemoveIfExists(card);
+        StackPile5.RemoveIfExists(card);
+        StackPile6.RemoveIfExists(card);
+        StackPile7.RemoveIfExists(card);
+    }
+
+    private void RemoveFromDiscards(Card card)
+    {
+        if (FirstDiscard != null && FirstDiscard.Suit == card.Suit && FirstDiscard.Value == card.Value)
+        {
+            FirstDiscard = null;
+            MoveUpDiscards();
+        }
+    }
+
+    private void RemoveFromDiscards(int index)
+    {
+        Hand.RemoveAt(index);
+    }
+
+    private void MoveUpDiscards()
+    {
+        FirstDiscard = SecondDiscard;
+        SecondDiscard = ThirdDiscard;
+
+        ThirdDiscard = DiscardPile.Pop();
+    }
+
+    private void RemoveFromSuitPiles(Card card)
+    {
+        HeartsPile.RemoveIfExists(card);
+        ClubsPile.RemoveIfExists(card);
+        DiamondsPile.RemoveIfExists(card);
+        SpadesPile.RemoveIfExists(card);
+    }
+
+    public void CardDoubleClick(Card card)
+    {
+        SuitPile selectedPile = ClubsPile;
+        switch (card.Suit)
+        {
+            case CardSuit.Diamonds:
+                selectedPile = DiamondsPile;
+                break;
+
+            case CardSuit.Spades:
+                selectedPile = SpadesPile;
+                break;
+
+            case CardSuit.Hearts:
+                selectedPile = HeartsPile;
+                break;
+        }
+
+
+        CheckMoveCardToSuitPile(card, selectedPile);
+    }
+
+    private void CheckMoveCardToSuitPile(Card card, SuitPile suitPile)
+    {
+        if (suitPile.Suit == card.Suit && suitPile.AllowedValue == card.Value)
+        {
+            MoveActiveCard(card, suitPile);
+        }
+    }
+
+    public async Task RevealCard(Card card, StackPile pile)
+    {
+        var lastPileCard = pile.Last();
+        if(lastPileCard.Suit == card.Suit && lastPileCard.Value == card.Value)
+        {
+            lastPileCard.IsVisible = true;
+        }
+        await AutoComplete();
+    }
+
+    public async Task DropCardOntoStack(StackPile targetStack)
+    {
+        //Get the topmost card of the target stack
+        var card = targetStack.Last();
+
+        if (card == null)
+        {
+            //Determine the stack the card came from
+            StackPile sourceStack = null;
+            if (StackPile7.Contains(DraggedCard))
+                sourceStack = StackPile7;
+            else if (StackPile6.Contains(DraggedCard))
+                sourceStack = StackPile6;
+            else if (StackPile5.Contains(DraggedCard))
+                sourceStack = StackPile5;
+            else if (StackPile4.Contains(DraggedCard))
+                sourceStack = StackPile4;
+            else if (StackPile3.Contains(DraggedCard))
+                sourceStack = StackPile3;
+            else if (StackPile2.Contains(DraggedCard))
+                sourceStack = StackPile2;
+            else if (StackPile1.Contains(DraggedCard))
+                sourceStack = StackPile1;
+
+            //If the card came from a stack, move the card's stack
+            if (sourceStack != null)
+            {
+                MoveCardStack(targetStack, sourceStack);
+            }
+
+            //If the card came from discards, remove it from there
+            //and add it to the target stack
+            if (DraggedCard == FirstDiscard)
+            {
+                RemoveFromDiscards(DraggedCard);
+                targetStack.Add(DraggedCard);
+            }
+
+            //If the card came from the suit piles, remove it from
+            //the suit pile and add it to the stack.
+            if (ClubsPile.Contains(DraggedCard)
+                || DiamondsPile.Contains(DraggedCard)
+                || SpadesPile.Contains(DraggedCard)
+                || HeartsPile.Contains(DraggedCard))
+            {
+                RemoveFromSuitPiles(DraggedCard);
+                targetStack.Add(DraggedCard);
+            }
+
+        }
+
+        //Refresh the interface
+        StateHasChanged();
+        await AutoComplete();
+    }
+
+    public async Task DropCardOntoStack(int targetStackIndex)
+    {
+        if (StackPiles[targetStackIndex].Count() == 0)
+        {
+            var card = DraggedHandIndex >= 0 ? Hand[DraggedHandIndex] : StackPiles[DraggedFieldIndex].Last();
+            if (card.IsCreature)
+            {
+                //If the card came from a stack, move the card's stack
+                if (DraggedFieldIndex >= 0)
+                {
+                    MoveCardStack(StackPiles[targetStackIndex], StackPiles[DraggedFieldIndex]);
+                }
+                else if (DraggedHandIndex >= 0)
+                {
+                    StackPiles[targetStackIndex].Add(Hand[DraggedHandIndex]);
+                    RemoveFromDiscards(DraggedHandIndex);
+                }
+            }
+        }
+
+        //Refresh the interface
+        StateHasChanged();
+        await AutoComplete();
+    }
+
+    private void MoveCardStack(StackPile targetStack, StackPile sourceStack)
+    {
+        //Check if any cards exist *lower* than dragged card
+        var index = sourceStack.IndexOf(DraggedCard);
+        if (sourceStack.Count() >= index)
+        {
+            List<Card> MoveCards = new List<Card>();
+            //Get all cards after the dragged card
+            while (index < sourceStack.Count())
+            {
+                MoveCards.Insert(0,sourceStack.Pop());
+            }
+
+            foreach (var card in MoveCards)
+            {
+                targetStack.Add(card);
+            }
+        }
+    }
+
+    private async Task AutoComplete()
+    {
+        if(StackPile1.HasNoHiddenCards()
+            && StackPile2.HasNoHiddenCards()
+            && StackPile3.HasNoHiddenCards()
+            && StackPile4.HasNoHiddenCards()
+            && StackPile5.HasNoHiddenCards()
+            && StackPile6.HasNoHiddenCards()
+            && StackPile7.HasNoHiddenCards()
+            && !DiscardPile.Any()
+            && MyDeck.Count == 0
+            && FirstDiscard == null)
+        {
+            while(!ClubsPile.IsComplete || !DiamondsPile.IsComplete || !SpadesPile.IsComplete || !HeartsPile.IsComplete)
+            {
+                await CheckMoveStackTopCard(StackPile1);
+                await CheckMoveStackTopCard(StackPile2);
+                await CheckMoveStackTopCard(StackPile3);
+                await CheckMoveStackTopCard(StackPile4);
+                await CheckMoveStackTopCard(StackPile5);
+                await CheckMoveStackTopCard(StackPile6);
+                await CheckMoveStackTopCard(StackPile7);
+
+                StateHasChanged();
+
+            }
+        }
+    }
+
+    public async Task CheckMoveStackTopCard(StackPile stackPile)
+    {
+        var card = stackPile.Last();
+        if (card != null)
+        {
+            CheckMoveCardToSuitPile(card, ClubsPile);
+            CheckMoveCardToSuitPile(card, DiamondsPile);
+            CheckMoveCardToSuitPile(card, SpadesPile);
+            CheckMoveCardToSuitPile(card, HeartsPile);
+        }
+        await Task.Delay(100);
+    }
+}
+
+@*<PageTitle Title="Brainstorm" />*@
+
+<div class="row">
+    <div class="col-2">
+        <button class="btn-primary" @onclick="NewGame">New Game</button>
+    </div>
+</div>
+@if (Status == GameStatus.Playing)
+{
+    <hr />
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+            <HiddenCard CssClass="brainstorm-drawdeck" />
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-1">
+        </div>
+    </div>
+    @for (int y = 0; y < 5; y++)
+    {
+        <div class="row">
+            <div class="col-1">
+            </div>
+            @for (int x = 0; x < 5; x++)
+            {
+                int position = x + (5 * y);
+                <div class="col-2">
+                    @if (StackPiles[position].Any())
+                    {
+                        @foreach (var card in StackPiles[position].GetAllCards())
+                        {
+                            if (card.IsVisible)
+                            {
+                                <DraggableCard Card="card"
+                                    DraggedCard="DraggedCard"
+                                    CssClass="brainstorm-stackpile"
+                                    HandleDragStartEvent="(() => HandleFieldDragStart(position))"
+                                    HandleDoubleClickEvent="(() => CardDoubleClick(card))"
+                                    HandleDropEvent="(() => DropCardOntoStack(position))" />
+                            }
+                            else
+                            {
+                                <HiddenCard CssClass="brainstorm-stackpile"
+                                    ClickEvent="(() => RevealCard(card, StackPiles[position]))" />
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <EmptyStack Pile="StackPiles[position]"
+                            DraggedCard="DraggedCard"
+                            DropEvent="(() => DropCardOntoStack(position))" />
+                    }
+                </div>
+            }
+            <div class="col-1">
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+            <div>
+                @{
+                    int cardCount = MyDeck.Count;
+                }
+                @if (cardCount > 0)
+                {
+                    <HiddenCard CssClass="brainstorm-drawdeck"
+                        ClickEvent="Draw" />
+                }
+                @if (MyDeck.Count == 0)
+                {
+                    <div class="brainstorm-drawdeck" @onclick="ResetDrawPile">
+                        <img src="images/Brainstorm/cardBackGrey.png" />
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-1">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            @for (int i = 0; i < Hand.Count; i++) //foreach (var card in Hand)
+            {
+                int hand = i;
+                <DraggableCard Card="Hand[hand]"
+                    CssClass="brainstorm-discards"
+                    HandleDragStartEvent="(() => HandleHandDragStart(hand))"
+                    HandleDoubleClickEvent="(() => CardDoubleClick(Hand[hand]))" />
+            }
+        </div>
+    </div>
+}
